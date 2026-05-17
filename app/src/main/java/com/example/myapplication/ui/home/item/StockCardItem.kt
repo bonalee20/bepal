@@ -51,14 +51,14 @@ fun StockCardItem(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = if (isPositive) "▲$changeRate%" else "▼$changeRate%",
-                    color = if (isPositive) Color(0xFF4CAF50) else Color(0xFFF44336),
+                    color = if (isPositive) Color(0xFFF44336) else Color(0xFF2196F3),
                     fontSize = 12.sp
                 )
             }
         }
     }
 }
-@Preview(showBackground = true)
+@Preview(showBackground = true) // api 가져오면 삭제 예정
 @Composable
 fun StockCardItemPreview() {
     StockCardItem(
