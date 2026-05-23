@@ -1,5 +1,6 @@
 package com.example.myapplication.data.remote
 
+import com.example.myapplication.data.model.StockInfoResponse
 import com.example.myapplication.data.model.StockResponse
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -15,5 +16,18 @@ interface StockApiService {
         @Header("custtype") custType: String = "P",
         @Query("FID_COND_MRKT_DIV_CODE") fidCondMrktDivCode: String = "J",
         @Query("FID_INPUT_ISCD") fidInputIscd: String
+
+
     ): StockResponse
+
+    @GET("uapi/domestic-stock/v1/quotations/search-stock-info")
+    suspend fun getStockInfo(
+        @Header("authorization") authorization: String,
+        @Header("appkey") appKey: String,
+        @Header("appsecret") appSecret: String,
+        @Header("tr_id") trId: String = "CTPF1002R",
+        @Header("custtype") custType: String = "P",
+        @Query("PDNO") pdno: String,           // 종목코드
+        @Query("PRDT_TYPE_CD") prdtTypeCd: String = "300"  // 주식
+    ): StockInfoResponse
 }

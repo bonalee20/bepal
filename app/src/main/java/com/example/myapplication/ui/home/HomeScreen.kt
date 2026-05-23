@@ -20,7 +20,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.myapplication.ui.home.item.StockCardItem
 import com.example.myapplication.ui.home.item.StockListItem
 import com.example.myapplication.viewmodel.HomeViewModel
-
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -30,6 +29,10 @@ fun HomeScreen(
     val stockList by viewModel.stockList.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadInitialStocks()
+    }
 
     Column(
         modifier = Modifier
@@ -103,7 +106,6 @@ fun HomeScreen(
         }
     }
 }
-
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {

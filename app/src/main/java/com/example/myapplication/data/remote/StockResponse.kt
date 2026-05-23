@@ -9,9 +9,9 @@ data class StockResponse(
 )
 
 data class StockOutput(
-    @SerializedName("stck_shrn_iscd") val stockCode: String,
-    @SerializedName("hts_kor_isnm") val companyName: String,
-    @SerializedName("stck_prpr") val price: String,
-    @SerializedName("prdy_ctrt") val changeRate: String,
-    @SerializedName("prdy_vrss_sign") val sign: String
+    @SerializedName("stck_shrn_iscd") val stockCode: String?,
+    @SerializedName("hts_kor_isnm") val companyName: String?,
+    @SerializedName("stck_prpr") val price: String?,
+    @SerializedName("prdy_ctrt") val changeRate: String?,
+    @SerializedName("prdy_vrss_sign") val sign: String?
 )
