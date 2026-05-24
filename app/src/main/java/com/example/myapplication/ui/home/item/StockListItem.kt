@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.util.formatNumber
 
 @Composable
 fun StockListItem(
@@ -44,7 +45,7 @@ fun StockListItem(
         }
 
         Column(horizontalAlignment = Alignment.End) {
-            Text(text = price, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+            Text(text = formatNumber(price), fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Text(
                 text = if (isPositive) "▲$changeRate%" else "▼$changeRate%",
                 color = if (isPositive) Color(0xFFF44336) else Color(0xFF2196F3),

@@ -40,6 +40,38 @@ class HomeViewModel : ViewModel() {
     }
 
     fun loadInitialStocks() {
-        listOf("005930", "000660", "035420").forEach { fetchStock(it) }
+
+    }
+    fun addStock(
+        stockCode: String,
+        stockName: String,
+        purchasePrice: String,
+        quantity: String,
+        targetRate: String
+    ) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            _errorMessage.value = null
+            try {
+                android.util.Log.d("AddStock", "stockCode: $stockCode 조회 시작")
+                val stock = repository.getStockPrice(APP_KEY, APP_SECRET, stockCode)
+                android.util.Log.d("AddStock", "조회 성공: ${stock.companyName}, ${stock.price}")
+                _stockList.value = _stockList.value + stock
+            } catch (e: Exception) {
+                android.util.Log.e("AddStock", "조회 실패: ${e.message}", e)
+                _errorMessage.value = "현재가 조회 실패: ${e.message}"
+                // fallback
+                val stock = Stock(
+                    stockCode = stockCode,
+                    companyName = stockName,
+                    price = purchasePrice,
+                    changeRate = targetRate,
+                    sign = "3"
+                )
+                _stockList.value = _stockList.value + stock
+            } finally {
+                _isLoading.value = false
+            }
+        }
     }
 }

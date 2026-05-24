@@ -33,6 +33,7 @@ class StockRepository {
         appSecret: String,
         stockCode: String
     ): Stock {
+        val cleanCode = stockCode.removePrefix("A")  // A 제거
         val token = fetchAccessToken(appKey, appSecret)
         val auth = "Bearer $token"
 
@@ -40,21 +41,19 @@ class StockRepository {
             authorization = auth,
             appKey = appKey,
             appSecret = appSecret,
-            fidInputIscd = stockCode
+            fidInputIscd = cleanCode  // 변경
         )
 
         val infoResponse = api.getStockInfo(
             authorization = auth,
             appKey = appKey,
             appSecret = appSecret,
-            pdno = stockCode
+            pdno = cleanCode  // 변경
         )
 
-        android.util.Log.d("StockAPI", "companyName: ${infoResponse.output?.companyName}")
-
         return Stock(
-            stockCode = priceResponse.output.stockCode ?: stockCode,
-            companyName = infoResponse.output?.companyName ?: stockCode,
+            stockCode = cleanCode,
+            companyName = infoResponse.output?.companyName ?: cleanCode,
             price = priceResponse.output.price ?: "0",
             changeRate = priceResponse.output.changeRate ?: "0",
             sign = priceResponse.output.sign ?: "3"

@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.myapplication.util.formatNumber
 
 @Composable
 fun StockCardItem(
@@ -47,7 +48,7 @@ fun StockCardItem(
             }
             Spacer(modifier = Modifier.height(12.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = price, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(text = formatNumber(price), fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = if (isPositive) "▲$changeRate%" else "▼$changeRate%",
