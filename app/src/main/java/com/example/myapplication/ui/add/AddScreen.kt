@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapplication.ui.add.item.AddField
 import com.example.myapplication.ui.add.item.AddTextField
-import com.example.myapplication.ui.home.item.BottomNavBar
 import com.example.myapplication.ui.add.item.StockSearchField
+import com.example.myapplication.ui.home.item.BottomNavBar
 import com.example.myapplication.util.formatNumber
 
 private fun calculateExpectedProfit(
@@ -40,7 +40,7 @@ fun AddScreen(
         quantity: String,
         targetRate: String
     ) -> Unit = { _, _, _, _, _ -> }
-){
+) {
     var stockName by remember { mutableStateOf("") }
     var stockCode by remember { mutableStateOf("") }
     var purchasePrice by remember { mutableStateOf("") }
@@ -48,6 +48,7 @@ fun AddScreen(
     var purchaseSite by remember { mutableStateOf("") }
     var targetRate by remember { mutableStateOf("") }
     var alarmEnabled by remember { mutableStateOf(false) }
+    var stockError by remember { mutableStateOf(false) }  // 추가
 
     val expectedProfit = remember(purchasePrice, quantity, targetRate) {
         calculateExpectedProfit(purchasePrice, quantity, targetRate)
@@ -72,12 +73,24 @@ fun AddScreen(
             AddField(label = "구매 종목") {
                 StockSearchField(
                     value = stockName,
-                    onValueChange = { stockName = it },
+                    onValueChange = {
+                        stockName = it
+                        if (it.isNotBlank()) stockError = false
+                    },
                     onStockSelected = { code, name ->
                         stockCode = code
                         stockName = name
+                        stockError = false
                     }
                 )
+                if (stockError) {
+                    Text(
+                        "구매 종목을 선택해주세요.",
+                        color = Color.Red,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -148,13 +161,17 @@ fun AddScreen(
 
             Button(
                 onClick = {
-                    onNavigateToHome(
-                        stockCode,
-                        stockName,
-                        purchasePrice,
-                        quantity,
-                        targetRate
-                    )
+                    if (stockName.isBlank()) {
+                        stockError = true
+                    } else {
+                        onNavigateToHome(
+                            stockCode,
+                            stockName,
+                            purchasePrice,
+                            quantity,
+                            targetRate
+                        )
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()

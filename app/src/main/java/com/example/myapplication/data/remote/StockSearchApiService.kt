@@ -3,36 +3,48 @@ package com.example.myapplication.data.remote
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-data class KrxStockItem(
-    val srtnCd: String,      // 단축코드 (종목코드)
-    val itmsNm: String,      // 종목명
-    val mrktCtg: String      // 시장구분 (KOSPI/KOSDAQ)
-)
-
 data class KrxResponse(
     val response: KrxResponseBody
 )
 
 data class KrxResponseBody(
+    val header: KrxHeader,
     val body: KrxResponseItems
 )
 
+data class KrxHeader(
+    val resultCode: String,
+    val resultMsg: String
+)
+
 data class KrxResponseItems(
-    val items: KrxItemList,
-    val totalCount: Int
+    val numOfRows: Int,
+    val pageNo: Int,
+    val totalCount: Int,
+    val items: KrxItemList
 )
 
 data class KrxItemList(
     val item: List<KrxStockItem>
 )
 
+data class KrxStockItem(
+    val basDt: String,
+    val srtnCd: String,
+    val isinCd: String,
+    val mrktCtg: String,
+    val itmsNm: String,
+    val crno: String,
+    val corpNm: String
+)
+
 interface StockSearchApiService {
     @GET("1160100/service/GetKrxListedInfoService/getItemInfo")
     suspend fun searchStock(
         @Query("serviceKey") serviceKey: String,
-        @Query("numOfRows") numOfRows: Int = 20,
+        @Query("numOfRows") numOfRows: Int = 50,
         @Query("pageNo") pageNo: Int = 1,
         @Query("resultType") resultType: String = "json",
-        @Query("itmsNm") itmsNm: String  // 종목명으로 검색
+        @Query("itmsNm") itmsNm: String
     ): KrxResponse
 }

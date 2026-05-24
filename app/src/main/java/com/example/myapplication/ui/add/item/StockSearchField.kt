@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.example.myapplication.data.model.StockSearchResult
 import com.example.myapplication.data.repository.StockSearchRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -36,6 +37,7 @@ fun StockSearchField(
                 if (input.length >= 2) {
                     isLoading = true
                     coroutineScope.launch {
+                        delay(300L)
                         suggestions = repository.searchStock(input)
                         isLoading = false
                         showDropdown = suggestions.isNotEmpty()

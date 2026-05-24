@@ -25,6 +25,7 @@ import com.example.myapplication.viewmodel.HomeViewModel
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onRegisterClick: () -> Unit = {},
+    onTabSelected: (String) -> Unit = {},
     viewModel: HomeViewModel = viewModel()
 ) {
     val stockList by viewModel.stockList.collectAsState()
@@ -116,7 +117,8 @@ fun HomeScreen(
 
         BottomNavBar(
             modifier = Modifier.align(Alignment.BottomCenter),
-            selectedTab = "홈"
+            selectedTab = "홈",
+            onTabSelected = onTabSelected
         )
     }
 }
