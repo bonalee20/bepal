@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.ui.add.AddScreen
 import com.example.myapplication.ui.home.HomeScreen
+import com.example.myapplication.ui.home.LoginScreen
 import com.example.myapplication.ui.list.StockListScreen
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.example.myapplication.viewmodel.HomeViewModel
@@ -29,8 +30,7 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
-@Composable
+}@Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     val homeViewModel: HomeViewModel = viewModel()
@@ -38,9 +38,20 @@ fun AppNavigation() {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = "login",  // 👈 변경
             modifier = Modifier.padding(innerPadding)
         ) {
+            // 👇 추가
+            composable("login") {
+                LoginScreen(
+                    onLoginSuccess = { nickname ->
+                        navController.navigate("home") {
+                            popUpTo("login") { inclusive = true }  // 뒤로가기로 로그인 못 돌아오게
+                        }
+                    }
+                )
+            }
+
             composable("home") {
                 HomeScreen(
                     viewModel = homeViewModel,
@@ -48,8 +59,8 @@ fun AppNavigation() {
                     onTabSelected = { tab ->
                         when (tab) {
                             "종목" -> navController.navigate("stockList")
-                            "알람" -> { /* 나중에 */ }
-                            "마이페이지" -> { /* 나중에 */ }
+                            "알람" -> { }
+                            "마이페이지" -> { }
                         }
                     }
                 )

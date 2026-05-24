@@ -17,6 +17,11 @@ import com.example.myapplication.data.repository.StockSearchRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+
 @Composable
 fun StockSearchField(
     value: String,
@@ -32,28 +37,36 @@ fun StockSearchField(
     Box {
         OutlinedTextField(
             value = value,
-            onValueChange = { input ->
-                onValueChange(input)
-                if (input.length >= 2) {
-                    isLoading = true
-                    coroutineScope.launch {
-                        delay(300L)
-                        suggestions = repository.searchStock(input)
-                        isLoading = false
-                        showDropdown = suggestions.isNotEmpty()
-                    }
-                } else {
-                    suggestions = emptyList()
-                    showDropdown = false
-                }
+            onValueChange = {
+                onValueChange(it)
+                showDropdown = false  // 타이핑 시 드롭다운 닫기
             },
             placeholder = { Text("삼성전자", color = Color.LightGray) },
             trailingIcon = {
-                if (isLoading) CircularProgressIndicator(
-                    modifier = Modifier.size(20.dp),
-                    color = Color(0xFFFF802D),
-                    strokeWidth = 2.dp
-                )
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        color = Color(0xFFFF802D),
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    IconButton(onClick = {
+                        if (value.isNotBlank()) {
+                            isLoading = true
+                            coroutineScope.launch {
+                                suggestions = repository.searchStock(value)
+                                isLoading = false
+                                showDropdown = suggestions.isNotEmpty()
+                            }
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = "검색",
+                            tint = Color(0xFFFF802D)
+                        )
+                    }
+                }
             },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),

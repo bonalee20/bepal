@@ -41,7 +41,7 @@ data class KrxStockItem(
 interface StockSearchApiService {
     @GET("1160100/service/GetKrxListedInfoService/getItemInfo")
     suspend fun searchStock(
-        @Query("serviceKey") serviceKey: String,
+        @Query("serviceKey", encoded = true) serviceKey: String,  // encoded = true 추가
         @Query("numOfRows") numOfRows: Int = 50,
         @Query("pageNo") pageNo: Int = 1,
         @Query("resultType") resultType: String = "json",
