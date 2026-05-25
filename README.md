@@ -196,3 +196,18 @@ gson = "com.squareup.retrofit2:converter-gson"
 mlkit-text-korean = "com.google.mlkit:text-recognition-korean:16.0.1"
 generativeai = "com.google.ai.client.generativeai:generativeai:0.9.0"
 ```
+
+
+
+
+
+
+
+# 진행 사진
+
+<img width="780" height="1688" alt="Home-Stock-0" src="https://github.com/user-attachments/assets/077b36a3-c548-4bb5-9a07-6ecad3d02a44" />
+
+<img width="1080" height="2340" alt="Screenshot_20260524_220507" src="https://github.com/user-attachments/assets/8d4309f9-5c20-4bcb-b8b1-b2ab14c6eedd" />
+
+
+
