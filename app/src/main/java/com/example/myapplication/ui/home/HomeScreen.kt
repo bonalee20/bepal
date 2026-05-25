@@ -20,7 +20,6 @@ import com.example.myapplication.ui.home.item.BottomNavBar
 import com.example.myapplication.ui.home.item.StockCardItem
 import com.example.myapplication.ui.home.item.StockListItem
 import com.example.myapplication.viewmodel.HomeViewModel
-import android.content.Context
 import androidx.compose.ui.platform.LocalContext
 import com.example.myapplication.util.WorkManagerScheduler
 
@@ -41,17 +40,6 @@ fun HomeScreen(
         viewModel.loadInitialStocks()
     }
 
-    LaunchedEffect(stockList) {
-        if (stockList.isNotEmpty()) {
-            WorkManagerScheduler.scheduleStockCheck(
-                context = context,
-                stockList = stockList,
-                appKey = viewModel.getAppKey(),
-                appSecret = viewModel.getAppSecret()
-            )
-        }
-    }
-
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -59,7 +47,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 16.dp)
-                .padding(bottom = 80.dp)  // BottomNavBar 높이만큼 여백
+                .padding(bottom = 80.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = "싸게 사고 비싸게 팔자", fontSize = 12.sp, color = Color.Gray)
@@ -131,15 +119,6 @@ fun HomeScreen(
                 Text(text = "종목 등록", fontSize = 16.sp, color = Color.White)
             }
 
-            Button(
-                onClick = { viewModel.checkAndNotify(context) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
-            ) {
-                Text(text = "알림 테스트", fontSize = 16.sp, color = Color.White)
-            }
         }
 
         BottomNavBar(

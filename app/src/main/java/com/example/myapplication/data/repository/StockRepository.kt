@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class StockRepository {
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://openapi.koreainvestment.com:9443/")
+        .baseUrl("https://openapivts.koreainvestment.com:29443/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 

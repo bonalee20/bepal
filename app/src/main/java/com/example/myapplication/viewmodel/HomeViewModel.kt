@@ -24,8 +24,8 @@ class HomeViewModel : ViewModel() {
     private val _errorMessage = MutableStateFlow<String?>(null)
     val errorMessage: StateFlow<String?> = _errorMessage
 
-    private val APP_KEY = "PSXWddRd0igLs7JPEI9aoGMbhqIp4ClAa8ds"
-    private val APP_SECRET = "46ni/y8Ys3diaF8Zs2Owj5RWhLDJWTdxn7TZ5r4341SyNoydFIXJ48oWqJ9GryC65uPUmagLPtBAWAFjarTd4rEQrPe4/lzMYzw92u3Zup1x0w+ARWAIi77kkFcfI+pVvn2kfHeKx++6C6o2nJIlCFZ51kO4HlfM/WgXrVhRjNZ/mri3xs8="
+    private val APP_KEY = "PSpwqNwYkT5M7Y8uJfTc2eXTqcpGbW1zCtpR"
+    private val APP_SECRET = "6kUfxXo1M7/nW08gC0KAPAoHJ4KuBbW9nkKmdKDqF2ilBPi2idReHhoJ0w/vBhQjnaukbum3tvOlLOmUvzhitIUasS1AfQ/wjsSRIkIWudN+s2pMKOHwOXh5LRokuvn5IGD43Wo0PybsP8338K1u/ab/YO//P/oFsbqV7oXWchZS+y7Rfz0="
 
     fun fetchStock(stockCode: String) {
         viewModelScope.launch {
@@ -62,7 +62,8 @@ class HomeViewModel : ViewModel() {
         stockName: String,
         purchasePrice: String,
         quantity: String,
-        targetRate: String
+        targetRate: String,
+        purchaseSite: String
     ) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -72,9 +73,10 @@ class HomeViewModel : ViewModel() {
                 val stock = repository.getStockPrice(APP_KEY, APP_SECRET, stockCode)
                 android.util.Log.d("AddStock", "조회 성공: ${stock.companyName}, ${stock.price}")
                 _stockList.value = _stockList.value + stock.copy(
-                    purchasePrice = purchasePrice,  // 👈 추가
-                    quantity = quantity,             // 👈 추가
-                    targetRate = targetRate          // 👈 추가
+                    purchasePrice = purchasePrice,
+                    quantity = quantity,
+                    targetRate = targetRate,
+                    purchaseSite = purchaseSite
                 )
             } catch (e: Exception) {
                 android.util.Log.e("AddStock", "조회 실패: ${e.message}", e)
@@ -85,9 +87,9 @@ class HomeViewModel : ViewModel() {
                     price = purchasePrice,
                     changeRate = "0",
                     sign = "3",
-                    purchasePrice = purchasePrice,  // 👈 추가
-                    quantity = quantity,             // 👈 추가
-                    targetRate = targetRate          // 👈 추가
+                    purchasePrice = purchasePrice,
+                    quantity = quantity,
+                    targetRate = targetRate
                 )
                 _stockList.value = _stockList.value + stock
             } finally {

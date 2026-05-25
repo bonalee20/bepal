@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication.ui.add.AddScreen
+import com.example.myapplication.ui.alarm.AlarmScreen
 import com.example.myapplication.ui.home.HomeScreen
 import com.example.myapplication.ui.home.LoginScreen
 import com.example.myapplication.ui.list.StockListScreen
@@ -30,7 +31,9 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}@Composable
+}
+
+@Composable
 fun AppNavigation() {
     val navController = rememberNavController()
     val homeViewModel: HomeViewModel = viewModel()
@@ -38,20 +41,18 @@ fun AppNavigation() {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "login",  // 👈 변경
+            startDestination = "login",
             modifier = Modifier.padding(innerPadding)
         ) {
-            // 👇 추가
             composable("login") {
                 LoginScreen(
                     onLoginSuccess = { nickname ->
                         navController.navigate("home") {
-                            popUpTo("login") { inclusive = true }  // 뒤로가기로 로그인 못 돌아오게
+                            popUpTo("login") { inclusive = true }
                         }
                     }
                 )
             }
-
             composable("home") {
                 HomeScreen(
                     viewModel = homeViewModel,
@@ -59,7 +60,7 @@ fun AppNavigation() {
                     onTabSelected = { tab ->
                         when (tab) {
                             "종목" -> navController.navigate("stockList")
-                            "알람" -> { }
+                            "알람" -> navController.navigate("alarm")
                             "마이페이지" -> { }
                         }
                     }
@@ -67,8 +68,8 @@ fun AppNavigation() {
             }
             composable("add") {
                 AddScreen(
-                    onNavigateToHome = { stockCode, stockName, price, quantity, targetRate ->
-                        homeViewModel.addStock(stockCode, stockName, price, quantity, targetRate)
+                    onNavigateToHome = { stockCode, stockName, price, quantity, targetRate, purchaseSite ->
+                        homeViewModel.addStock(stockCode, stockName, price, quantity, targetRate, purchaseSite)
                         navController.navigate("home") {
                             popUpTo("home") { inclusive = true }
                         }
@@ -83,6 +84,21 @@ fun AppNavigation() {
                             "홈" -> navController.navigate("home") {
                                 popUpTo("home") { inclusive = true }
                             }
+                            "알람" -> navController.navigate("alarm")
+                            "마이페이지" -> { }
+                        }
+                    }
+                )
+            }
+            composable("alarm") {
+                AlarmScreen(
+                    onTabSelected = { tab ->
+                        when (tab) {
+                            "홈" -> navController.navigate("home") {
+                                popUpTo("home") { inclusive = true }
+                            }
+                            "종목" -> navController.navigate("stockList")
+                            "마이페이지" -> { }
                         }
                     }
                 )

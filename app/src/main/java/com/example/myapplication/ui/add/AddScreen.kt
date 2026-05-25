@@ -31,6 +31,7 @@ private fun calculateExpectedProfit(
     return "%,.0f".format(profit)
 }
 
+
 @Composable
 fun AddScreen(
     onNavigateToHome: (
@@ -38,9 +39,10 @@ fun AddScreen(
         stockName: String,
         price: String,
         quantity: String,
-        targetRate: String
-    ) -> Unit = { _, _, _, _, _ -> }
-) {
+        targetRate: String,
+        purchaseSite: String
+    ) -> Unit = { _, _, _, _, _, _ -> }
+){
     var stockName by remember { mutableStateOf("") }
     var stockCode by remember { mutableStateOf("") }
     var purchasePrice by remember { mutableStateOf("") }
@@ -169,7 +171,8 @@ fun AddScreen(
                             stockName,
                             purchasePrice,
                             quantity,
-                            targetRate
+                            targetRate,
+                            purchaseSite
                         )
                     }
                 },

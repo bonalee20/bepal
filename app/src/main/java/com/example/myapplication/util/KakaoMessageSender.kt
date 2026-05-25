@@ -15,12 +15,13 @@ object KakaoMessageSender {
         companyName: String,
         currentPrice: String,
         targetPrice: String,
-        changeRate: String
+        changeRate: String,
+        purchaseSite: String
     ) {
         val template = FeedTemplate(
             content = Content(
                 title = "🎯 목표가 달성! $companyName",
-                description = "현재가: ${currentPrice}원\n목표가: ${targetPrice}원\n등락률: ${changeRate}%",
+                description = "현재가: ${currentPrice}원\n목표가: ${targetPrice}원\n등락률: ${changeRate}%\n\n📌 $purchaseSite",
                 imageUrl = "https://via.placeholder.com/300x200",
                 link = Link()
             ),

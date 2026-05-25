@@ -9,5 +9,6 @@ data class Stock(
     val purchasePrice: String = "0",
     val quantity: String = "0",
     val targetRate: String = "0",
-    val highPrice: String = "0"
+    val highPrice: String = "0",
+    val purchaseSite: String = ""
 )

@@ -33,7 +33,8 @@ object StockAlertManager {
                         companyName = stock.companyName,
                         currentPrice = "%,.0f".format(currentPrice),
                         targetPrice = "%,.0f".format(targetPrice),
-                        changeRate = current.changeRate
+                        changeRate = current.changeRate,
+                        purchaseSite = stock.purchaseSite
                     )
                 }
 
