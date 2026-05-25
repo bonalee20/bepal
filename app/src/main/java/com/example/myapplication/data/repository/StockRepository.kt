@@ -28,12 +28,15 @@ class StockRepository {
         return response.accessToken
     }
 
+    companion object {
+        val instance: StockRepository by lazy { StockRepository() }
+    }
     suspend fun getStockPrice(
         appKey: String,
         appSecret: String,
         stockCode: String
     ): Stock {
-        val cleanCode = stockCode.removePrefix("A")  // A 제거
+        val cleanCode = stockCode.removePrefix("A")
         val token = fetchAccessToken(appKey, appSecret)
         val auth = "Bearer $token"
 
@@ -41,14 +44,14 @@ class StockRepository {
             authorization = auth,
             appKey = appKey,
             appSecret = appSecret,
-            fidInputIscd = cleanCode  // 변경
+            fidInputIscd = cleanCode
         )
 
         val infoResponse = api.getStockInfo(
             authorization = auth,
             appKey = appKey,
             appSecret = appSecret,
-            pdno = cleanCode  // 변경
+            pdno = cleanCode
         )
 
         return Stock(
@@ -56,8 +59,8 @@ class StockRepository {
             companyName = infoResponse.output?.companyName ?: cleanCode,
             price = priceResponse.output.price ?: "0",
             changeRate = priceResponse.output.changeRate ?: "0",
-            sign = priceResponse.output.sign ?: "3"
+            sign = priceResponse.output.sign ?: "3",
+            highPrice = priceResponse.output.highPrice ?: "0"
         )
     }
-
 }

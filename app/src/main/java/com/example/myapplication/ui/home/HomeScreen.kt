@@ -20,6 +20,10 @@ import com.example.myapplication.ui.home.item.BottomNavBar
 import com.example.myapplication.ui.home.item.StockCardItem
 import com.example.myapplication.ui.home.item.StockListItem
 import com.example.myapplication.viewmodel.HomeViewModel
+import android.content.Context
+import androidx.compose.ui.platform.LocalContext
+import com.example.myapplication.util.WorkManagerScheduler
+
 
 @Composable
 fun HomeScreen(
@@ -31,10 +35,23 @@ fun HomeScreen(
     val stockList by viewModel.stockList.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.loadInitialStocks()
     }
+
+    LaunchedEffect(stockList) {
+        if (stockList.isNotEmpty()) {
+            WorkManagerScheduler.scheduleStockCheck(
+                context = context,
+                stockList = stockList,
+                appKey = viewModel.getAppKey(),
+                appSecret = viewModel.getAppSecret()
+            )
+        }
+    }
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
@@ -113,6 +130,16 @@ fun HomeScreen(
             ) {
                 Text(text = "종목 등록", fontSize = 16.sp, color = Color.White)
             }
+
+            Button(
+                onClick = { viewModel.checkAndNotify(context) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+            ) {
+                Text(text = "알림 테스트", fontSize = 16.sp, color = Color.White)
+            }
         }
 
         BottomNavBar(
@@ -120,5 +147,7 @@ fun HomeScreen(
             selectedTab = "홈",
             onTabSelected = onTabSelected
         )
+
     }
+
 }

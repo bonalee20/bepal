@@ -1,16 +1,19 @@
 package com.example.myapplication.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.model.Stock
 import com.example.myapplication.data.repository.StockRepository
+import com.example.myapplication.util.StockAlertManager
+import com.example.myapplication.util.WorkManagerScheduler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
 
-    private val repository = StockRepository()
+    private val repository = StockRepository.instance
 
     private val _stockList = MutableStateFlow<List<Stock>>(emptyList())
     val stockList: StateFlow<List<Stock>> = _stockList
@@ -40,7 +43,19 @@ class HomeViewModel : ViewModel() {
     }
 
     fun loadInitialStocks() {
-
+    }
+    fun getAppKey() = APP_KEY
+    fun getAppSecret() = APP_SECRET
+    fun checkAndNotify(context: Context) {
+        viewModelScope.launch {
+            android.util.Log.d("StockAlert", "checkAndNotify 호출됨, 종목 수: ${_stockList.value.size}")
+            StockAlertManager.checkAndNotify(
+                context = context,
+                stockList = _stockList.value,
+                appKey = APP_KEY,
+                appSecret = APP_SECRET
+            )
+        }
     }
     fun addStock(
         stockCode: String,
@@ -56,17 +71,23 @@ class HomeViewModel : ViewModel() {
                 android.util.Log.d("AddStock", "stockCode: $stockCode 조회 시작")
                 val stock = repository.getStockPrice(APP_KEY, APP_SECRET, stockCode)
                 android.util.Log.d("AddStock", "조회 성공: ${stock.companyName}, ${stock.price}")
-                _stockList.value = _stockList.value + stock
+                _stockList.value = _stockList.value + stock.copy(
+                    purchasePrice = purchasePrice,  // 👈 추가
+                    quantity = quantity,             // 👈 추가
+                    targetRate = targetRate          // 👈 추가
+                )
             } catch (e: Exception) {
                 android.util.Log.e("AddStock", "조회 실패: ${e.message}", e)
                 _errorMessage.value = "현재가 조회 실패: ${e.message}"
-                // fallback
                 val stock = Stock(
                     stockCode = stockCode,
                     companyName = stockName,
                     price = purchasePrice,
-                    changeRate = targetRate,
-                    sign = "3"
+                    changeRate = "0",
+                    sign = "3",
+                    purchasePrice = purchasePrice,  // 👈 추가
+                    quantity = quantity,             // 👈 추가
+                    targetRate = targetRate          // 👈 추가
                 )
                 _stockList.value = _stockList.value + stock
             } finally {
@@ -74,4 +95,14 @@ class HomeViewModel : ViewModel() {
             }
         }
     }
+    fun startStockCheckSchedule(context: Context) {
+        WorkManagerScheduler.scheduleStockCheck(
+            context = context,
+            stockList = _stockList.value,
+            appKey = APP_KEY,
+            appSecret = APP_SECRET
+        )
+    }
+
+
 }

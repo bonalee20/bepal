@@ -66,5 +66,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("androidx.navigation:navigation-compose:2.7.7")
     implementation(libs.kakao.user)
-
+    implementation(libs.kakao.talk)
+    implementation(libs.kakao.template)
+    implementation(libs.androidx.work)
 }
