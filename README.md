@@ -4,6 +4,8 @@
 
 목표 주가에 도달하면 카카오톡으로 알림을 보내주는 주식 매도 알림 앱입니다.
 
+<img width="1280" height="624" alt="스크린샷 2026-05-25 185829" src="https://github.com/user-attachments/assets/0fe9dfc7-c2a6-4381-a378-034f77e9eb16" />
+
 ---
 
 ## 주요 기능
@@ -197,7 +199,7 @@ mlkit-text-korean = "com.google.mlkit:text-recognition-korean:16.0.1"
 generativeai = "com.google.ai.client.generativeai:generativeai:0.9.0"
 ```
 
-<img width="1280" height="624" alt="스크린샷 2026-05-25 185829" src="https://github.com/user-attachments/assets/0fe9dfc7-c2a6-4381-a378-034f77e9eb16" />
+
 
 
 
